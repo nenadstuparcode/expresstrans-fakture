@@ -1,0 +1,16 @@
+<div class="controls">
+  <ion-button
+    size="small"
+    color="medium"
+    (click)="control.action()"
+    *ngFor="let control of controls"
+    [ngClass]="control?.customClass || ''">
+    <ion-icon
+      slot="icon-only"
+      size="small"
+      [name]="control.icon"
+    ></ion-icon>
+  </ion-button>
+</div>
+
+

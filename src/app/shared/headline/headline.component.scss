@@ -1,0 +1,20 @@
+.headline {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid gray;
+  padding-bottom: 10px;
+  &.small {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  &.medium {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  &.large {
+    font-size: 12px;
+    font-weight: bold;
+  }
+}

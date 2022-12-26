@@ -1,0 +1,87 @@
+<ng-container *ngIf="client$ | async as client; else noData">
+<ion-card  color="light">
+    <ion-card-header>
+      <ion-card-title>{{client.name}}</ion-card-title>
+      <ion-card-subtitle>kreirano: {{client.createdAt | date: "dd.MM.YYYY"}}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <app-client-form-shared
+        [new]="false"
+        [data]="client"
+        (onAction)="onAction($event)"
+      ></app-client-form-shared>
+    </ion-card-content>
+</ion-card>
+  <app-invoice-list [title]="'Fakture od ' + client.name" [clientId]="clientId"></app-invoice-list>
+<!--<ion-card  color="light">-->
+
+<!--  <ion-card-header>-->
+<!--    <ion-card-title>Fakture od {{client.name}}</ion-card-title>-->
+<!--    <ion-card-subtitle></ion-card-subtitle>-->
+<!--  </ion-card-header>-->
+
+<!--  <ion-card-content>-->
+<!--    <table-filter-->
+<!--      [params]="this.params"-->
+<!--      (onSearch)="onSearch($event)"-->
+<!--      [filters]="filters"-->
+<!--    ></table-filter>-->
+<!--    {{ hasErrorLoading$ | async | json}}-->
+<!--    <table-shared-->
+<!--      [dataSource$]="data$"-->
+<!--      [columnsConfig]="columnsConfig"-->
+<!--      [isLoadingResults]="isLoadingResults$ | async"-->
+<!--      [hasErrorLoading]="hasErrorLoading$ | async"-->
+<!--      [displayedColumns]="displayedColumns"-->
+<!--      (onRowClick)="rowClick($event)"-->
+<!--    >-->
+<!--      <mat-paginator [length]="totalDataCount"-->
+<!--                     [pageSize]="this.params.searchLimit"-->
+<!--                     [showFirstLastButtons]="true"-->
+<!--                     [pageSizeOptions]="[5,10,15,25,100]"-->
+<!--                     [hidePageSize]="false"-->
+<!--                     [pageIndex]="pageIndex"-->
+<!--                     (page)="handlePageEvent($event)">-->
+<!--      </mat-paginator>-->
+<!--    </table-shared>-->
+<!--  </ion-card-content>-->
+<!--</ion-card>-->
+</ng-container>
+
+
+<ng-template #noData>
+  <ion-card-content>
+    <ng-container *ngIf="error$ | async as error; else errorTemplate">
+      Učitavanje...
+    </ng-container>
+    <ng-template #errorTemplate>
+      Greška u pretrazi...
+    </ng-template>
+  </ion-card-content>
+</ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

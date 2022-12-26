@@ -1,0 +1,34 @@
+<ion-card  color="light">
+  <ion-card-header>
+    <div class="header-controls-flex">
+      <ion-card-title>Kreiraj vozilo</ion-card-title>
+      <ion-button size="small" color="light" (click)="expanded = !expanded">{{expanded ? 'zatvori': 'dodaj'}}</ion-button>
+    </div>
+  </ion-card-header>
+
+  <ion-card-content *ngIf="expanded">
+    <app-vehicle-form-shared
+      [new]="true"
+      [data]="null"
+      (onAction)="detectAction($event)"
+    ></app-vehicle-form-shared>
+
+  </ion-card-content>
+</ion-card>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

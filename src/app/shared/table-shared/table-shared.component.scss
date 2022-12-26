@@ -1,0 +1,106 @@
+table {
+  width: 100%;
+  overflow-x: scroll;
+  min-width: 1200px;
+}
+
+.example-table-container {
+  position: relative;
+  min-height: 200px;
+  max-height: 450px;
+  overflow: auto;
+}
+
+@media only screen and (max-width: 1200px) {
+  .example-table-container {
+    overflow-x: scroll;
+  }
+}
+
+.example-table-container {
+  min-height: 25px;
+}
+.example-table-container.loading ,
+.example-table-container.error,
+.example-table-container.no-results-length {
+  min-height: 200px !important;
+}
+
+
+.example-loading-shade {
+  position: absolute;
+  top: 25px;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+table {
+  width: 100%;
+}
+
+.example-container {
+  position: relative;
+}
+
+
+tr.table-shared-row:hover {
+  background: whitesmoke;
+}
+
+tr.table-shared-row:active {
+  background: #efefef;
+}
+
+tr.mat-row:not(tr.example-detail-row), tr.mat-footer-row, tr.mat-header-row {
+  height: 25px;
+}
+
+td.mat-cell {
+  padding: 0 5px;
+  font-size: 14px;
+}
+
+th.mat-header-cell {
+  color: black;
+  padding: 0 5px;
+}
+
+ion-button {
+  font-size: 10px !important;
+}
+
+::ng-deep .mat-stroked-button.table-button {
+  font-size: 12px;
+  font-weight: 400;
+  padding: 2px 4px;
+  min-height: 10px;
+  max-height: unset;
+  min-width: unset;
+  line-height: 1;
+  border-radius: unset;
+  background: whitesmoke;
+  & .icon-delete {
+    font-size: 18px;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.error-message,
+.status-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.d-none {
+  display: none;
+}

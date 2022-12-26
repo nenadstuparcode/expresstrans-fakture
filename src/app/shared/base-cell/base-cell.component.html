@@ -1,0 +1,21 @@
+<!-- If just value -->
+<ng-container *ngIf="!column.customComponent && !column.template">
+  <ng-container #cellRef>
+    {{ cellValue }}
+  </ng-container>
+</ng-container>
+
+<!-- If html/ng-template -->
+<ng-container *ngIf="column.template">
+  <ng-container *ngIf="isStringTemplate; else angularTemplate">
+    <div [innerHTML]="column.template"></div>
+  </ng-container>
+
+  <ng-template #angularTemplate>
+    <ng-container *ngTemplateOutlet="column.template; context: { column: column, rowData: rowData}"></ng-container>
+  </ng-template>
+</ng-container>
+<!-- If component -->
+<ng-container *ngIf="column.customComponent">
+  <ng-container #container></ng-container>
+</ng-container>

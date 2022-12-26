@@ -1,0 +1,86 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import '~@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+@import '~bootstrap/scss/bootstrap';
+@import "./src/theme/mixins.scss";
+
+//@tailwind base;
+//@tailwind components;
+//@tailwind utilities;
+
+//textarea:focus,
+//textarea.form-control:focus,
+//input.form-control:focus,
+//input[type=text]:focus,
+//input[type=password]:focus,
+//input[type=email]:focus,
+//input[type=number]:focus,
+//[type=text].form-control:focus,
+//[type=password].form-control:focus,
+//[type=email].form-control:focus,
+//[type=tel].form-control:focus,
+//[contenteditable].form-control:focus {
+//  border: 1px solid black;
+//  box-shadow: inset 0 0 0 #000;
+//}
+
+body {
+  max-width: 1800px;
+  position: relative;
+  display: block;
+  margin: 0 auto;
+  border-right: 1px solid grey;
+  border-left: 1px solid grey;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.example-form-field {
+  width: 100%;
+}
+
+/* Border */
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #666;
+  background: white;
+  border-radius: 4px;
+}
+
+.header-controls-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.centered-checkbox {
+  width: 100%;
+  height: 60px;
+  @include flexCenter;
+}

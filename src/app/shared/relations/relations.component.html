@@ -1,0 +1,3 @@
+<ng-container *ngIf="cellValue as relations">
+  <small class="relation" *ngFor="let rel of relations; index as i">{{i + 1}}. {{rel?.name || ''}}</small>
+</ng-container>

@@ -1,0 +1,338 @@
+<div class="row">
+  <ng-container *ngIf="invoiceForm">
+    <ng-container [formGroup]="invoiceForm">
+      <div class="col-lg-7">
+        <div class="row">
+          <!--    Invoice Number   -->
+          <div class="col-lg-4 col-sm-6">
+            <mat-form-field class="example-form-field" appearance="outline">
+              <mat-label>Broj Fakture</mat-label>
+              <input autocomplete="off" matInput type="number" formControlName="invoiceId" />
+              <button tabindex="-1" *ngIf="true" matSuffix mat-icon-button aria-label="Clear" (click)="invoiceId.reset()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+
+          <!--    Invoice Client   -->
+          <div class="col-lg-8 col-sm-6">
+            <mat-form-field class="example-form-field" appearance="outline">
+              <mat-label>Naziv Klijenta</mat-label>
+              <input type="text" matInput formControlName="clientId" isInArray [arrayToCheck]="clients" [matAutocomplete]="client"  />
+              <mat-error *ngIf="invoiceForm.controls['clientId'].errors?.isInArray"> Izaberi iz menija </mat-error>
+              <button tabindex="-1" *ngIf="true" matSuffix mat-icon-button aria-label="Clear" (click)="resetForm(invoiceForm.controls['clientId'], $event)">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-autocomplete #client="matAutocomplete" [displayWith]="displayFnClient">
+                <mat-option *ngFor="let option of filteredClients$ | async" [value]="option.id">
+                  {{ option.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <div class="offset-lg-12">
+            <section class="example-form-field mb-custom mt-1">
+<!--              <label class="sm-margin">Tip Fakture:</label>-->
+              <mat-radio-group formControlName="invoiceType">
+                <mat-radio-button class="sm-margin" value="cargo" (click)="resetFullPrice()">
+                  Transport Robe
+                </mat-radio-button>
+                <mat-radio-button class="sm-margin" value="bus" (click)="resetCargoRelations()">
+                  Transport Putnika
+                </mat-radio-button>
+              </mat-radio-group>
+            </section>
+
+          </div>
+          <!--    Invoice Date Created   -->
+
+          <div class="col-lg-6">
+            <app-date
+              name="invoiceDateStart"
+              [group]="invoiceForm"
+              title="Datum Fakture"
+              type="date"
+              (onChange)="setDate($event, invoiceForm.controls['invoiceDateStart'])"
+            >
+            </app-date>
+          </div>
+
+          <!--    Invoice Deadline    -->
+          <div class="col-lg-6">
+            <app-date
+              name="invoiceDateReturn"
+              [group]="invoiceForm"
+              [title]=" invoiceType === 'cargo' ? 'Datum Istovara' : 'Datum Povratka' "
+              type="date"
+              (onChange)="setDate($event, invoiceForm.controls['invoiceDateReturn'])"
+            >
+            </app-date>
+          </div>
+
+          <div class="col-lg-12" [hidden]="invoiceType !== InvoiceTypes.cargo">
+            <mat-form-field class="example-form-field" appearance="outline">
+              <mat-chip-list #chipList>
+                <mat-chip
+                  *ngFor="let keyword of cmr.value"
+                  (removed)="removeCMR(keyword)">
+                  {{keyword}}
+                  <mat-icon tabindex="-1" matChipRemove>cancel</mat-icon>
+                </mat-chip>
+                <input placeholder="CMR"
+                       [matChipInputFor]="chipList"
+                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                       [matChipInputAddOnBlur]="true"
+                       (matChipInputTokenEnd)="addCMR($event)">
+              </mat-chip-list>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="row">
+
+          <div class="col-lg-6">
+            <mat-form-field class="example-form-field" appearance="outline">
+              <mat-label>Valuta</mat-label>
+              <input autocomplete="off" matInput type="number" formControlName="deadline" />
+            </mat-form-field>
+          </div>
+
+          <div class="col-lg-6">
+            <mat-form-field class="example-form-field" appearance="outline">
+              <mat-label>Broj naloga</mat-label>
+              <input autocomplete="off" matInput type="string" formControlName="accountNumber" />
+            </mat-form-field>
+          </div>
+
+          <div class="col-lg-6">
+              <mat-form-field class="example-form-field" appearance="outline">
+                <mat-label>Vozac</mat-label>
+                <input type="text" matInput formControlName="invDriver" isInArray [arrayToCheck]="drivers" [isRequired]="true" [matAutocomplete]="driver" />
+                <mat-error *ngIf="invoiceForm.controls['invDriver'].errors?.isInArray"> Izaberi iz menija </mat-error>
+                <button tabindex="-1" matSuffix mat-icon-button aria-label="Clear" (click)="resetForm(invoiceForm.controls['invDriver'], $event)">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-autocomplete #driver="matAutocomplete" [displayWith]="displayFnDriver">
+                  <mat-option *ngFor="let option of filteredDrivers$ | async" [value]="option.id">
+                    {{ option.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+          </div>
+
+          <div class="col-lg-6">
+            <mat-form-field class="example-form-field" appearance="outline">
+              <mat-label>Vozilo</mat-label>
+              <input type="text" matInput formControlName="invoiceVehicle" isInArray [arrayToCheck]="vehicles" [isRequired]="true" [matAutocomplete]="vehicle" />
+              <mat-error *ngIf="invoiceForm.controls['invoiceVehicle'].errors?.isInArray"> Izaberi iz menija </mat-error>
+              <button tabindex="-1" *ngIf="true" matSuffix mat-icon-button aria-label="Clear" (click)="resetForm(invoiceForm.controls['invoiceVehicle'], $event)">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-autocomplete  #vehicle="matAutocomplete" [displayWith]="displayFnVehicle">
+                <mat-option *ngFor="let option of filteredVehicles$ | async" [value]="option.id">
+                  {{ option.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <div class="col-lg-6" [hidden]="invoiceType === InvoiceTypes.bus">
+              <mat-form-field class="example-form-field" appearance="outline">
+                <mat-label>Prikolica</mat-label>
+                <input type="text" matInput formControlName="invTrailer" isInArray [arrayToCheck]="trailers" [isRequired]="false" [matAutocomplete]="trailer" />
+                <mat-error *ngIf="invoiceForm.controls['invTrailer'].errors?.isInArray"> Izaberi iz menija </mat-error>
+                <button tabindex="-1" *ngIf="true" matSuffix mat-icon-button aria-label="Clear" (click)="resetForm(invoiceForm.controls['invTrailer'], $event)">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-autocomplete  #trailer="matAutocomplete" [displayWith]="displayFnTrailer">
+                  <mat-option *ngFor="let option of filteredTrailers$ | async" [value]="option.id">
+                    {{ option.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+          </div>
+
+          <div class="col-lg-4" [hidden]="invoiceType !== InvoiceTypes.bus">
+            <mat-form-field class="example-form-field" appearance="outline">
+              <mat-label>Iznos KM</mat-label>
+              <input
+                currencyMask
+                (focusin)="setUpdating(true, 'bam')"
+                (focusout)="setUpdating(false, 'bam')"
+                [options]="taxService.configBam"
+                autocomplete="off"
+                matInput
+                type="text"
+                formControlName="priceKm"
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="col-lg-4" [hidden]="invoiceType !== InvoiceTypes.bus">
+            <mat-form-field class="example-form-field" appearance="outline">
+              <mat-label>Iznos PDV-a</mat-label>
+              <input autocomplete="off" readonly matInput type="text" [value]="invoiceForm.controls['priceKm'].value | tax | currency" />
+            </mat-form-field>
+          </div>
+
+          <div class="col-lg-4" [hidden]="invoiceType !== InvoiceTypes.bus">
+            <mat-form-field class="example-form-field" appearance="outline">
+              <mat-label>Iznos EUR</mat-label>
+              <input
+                currencyMask
+                (focusin)="setUpdating(true, 'eur')"
+                (focusout)="setUpdating(false, 'eur')"
+                [options]="taxService.configEuro"
+                autocomplete="off"
+                matInput
+                type="text"
+                formControlName="priceEuros"
+              />
+            </mat-form-field>
+          </div>
+
+          <div [ngClass]="invoiceType === InvoiceTypes.bus ? 'offset-lg-8 col-lg-4' : 'col-lg-6'">
+            <div class="centered-checkbox">
+              <mat-checkbox formControlName="payed">Plaćeno</mat-checkbox>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-lg-12 border-top-custom pt-3">
+        <div class="row">
+          <div class="col-lg-12">
+            <h3 class="relations-title pb-3">Relacije</h3>
+          </div>
+        </div>
+        <div class="row">
+          <!--    Invoice Relations    -->
+          <ng-container *ngIf="relations.value as relations">
+            <div class="col-lg-12 table-container" *ngIf="relations.length">
+              <table class="table table-bordered">
+                <thead>
+                <tr>
+                  <th scope="col">Br.</th>
+                  <th scope="col">Relacija</th>
+                  <th class="text-right" scope="col">Kilometri</th>
+                  <th class="text-right" scope="col">Cijena KM</th>
+                  <th class="text-right" scope="col">Cijena EUR</th>
+                  <th class="text-right" scope="col">PDV KM</th>
+                  <th class="text-right"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="table-row-custom" *ngFor="let relation of relations; index as i">
+                  <td width="5%">{{i + 1}}</td>
+                  <td width="40%">{{relation.name}}</td>
+                  <td class="text-right" width="10%">{{relation.kilometers }}</td>
+                  <td class="text-right" width="12%">{{relation.priceKm | currency: "KM"}}</td>
+                  <td class="text-right" width="13%">{{relation.priceEur | currency: "EUR"}}</td>
+                  <td class="text-right" width="10%">{{relation.priceKmTax | currency: "KM"}}</td>
+                  <td class="text-right" align="right" width="10%"><ion-icon (click)="removeRelation(i)" color="danger" name="trash-outline"></ion-icon></td>
+                </tr>
+                <tr>
+                  <td width="5%"></td>
+                  <td width="40%"></td>
+                  <td class="text-right" width="10%">Ukupno: {{ calculateKilometers(relations)}}</td>
+                  <td class="text-right" width="12%">{{ calculateRelations(relations, 'priceKm') | currency: "KM" }}</td>
+                  <td class="text-right" width="13%">{{ calculateRelations(relations, 'priceEur') | currency: "EUR" }}</td>
+                  <td class="text-right" width="10%">{{ calculateRelations(relations, 'priceKmTax') | currency: "KM" }}</td>
+                  <td class="text-right" width="10%"></td>
+
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </ng-container>
+          <ng-container [formGroup]="relationsForm">
+            <div class="col-lg-3">
+
+              <mat-form-field class="example-form-field" appearance="outline">
+                <mat-label>Relacija {{  relations.value.length + 1 }}</mat-label>
+                <input type="text" matInput formControlName="name" [matAutocomplete]="relation" />
+                <button tabindex="-1" *ngIf="true" matSuffix mat-icon-button aria-label="Clear" (click)="resetForm(relationsForm.controls['name'], $event)">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-autocomplete  #relation="matAutocomplete">
+                  <mat-option *ngFor="let option of filteredRelations$ | async" [value]="option.name">
+                    {{ option.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+
+            <div class="col-lg-2" [hidden]="invoiceType !== InvoiceTypes.cargo">
+              <mat-form-field class="example-form-field" appearance="outline">
+                <mat-label>Iznos KM</mat-label>
+                <input
+                  [readonly]="invoiceType !== InvoiceTypes.cargo"
+                  currencyMask
+                  (focusin)="setUpdating(true, 'bam')"
+                  (focusout)="setUpdating(false, 'bam')"
+                  [options]="taxService.configBam"
+                  autocomplete="off"
+                  matInput
+                  type="text"
+                  formControlName="priceKm"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="col-lg-2" [hidden]="invoiceType !== InvoiceTypes.cargo">
+              <mat-form-field class="example-form-field" appearance="outline">
+                <mat-label>Iznos PDV-a</mat-label>
+                <input autocomplete="off" readonly matInput type="text" [value]="relationsForm.controls['priceKm'].value | tax | currency" />
+              </mat-form-field>
+            </div>
+
+            <div class="col-lg-2" [hidden]="invoiceType !== InvoiceTypes.cargo">
+              <mat-form-field class="example-form-field" appearance="outline">
+                <mat-label>Iznos EUR</mat-label>
+                <input
+                  [readonly]="invoiceType !== InvoiceTypes.cargo"
+                  currencyMask
+                  (focusin)="setUpdating(true, 'eur')"
+                  (focusout)="setUpdating(false, 'eur')"
+                  [options]="taxService.configEuro"
+                  autocomplete="off"
+                  matInput
+                  type="text"
+                  formControlName="priceEur"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="col-lg-2">
+              <mat-form-field class="example-form-field" appearance="outline">
+                <mat-label>Kilometri</mat-label>
+                <input autocomplete="off" matInput type="number" formControlName="kilometers"/>
+              </mat-form-field>
+            </div>
+
+            <div class="col-lg-1 add-button">
+              <ion-button
+                size="small"
+                [disabled]="relationsForm.invalid"
+                (click)="addRelation()"
+                class="example-form-field">
+                <mat-icon>add</mat-icon>
+              </ion-button>
+            </div>
+
+          </ng-container>
+
+        </div>
+      </div>
+    </ng-container>
+    <div class="action-buttons">
+      <ion-button color="light" slot="end" size="small" (click)="onCancel()">Odustani</ion-button>
+      <ion-button slot="end" size="small" [disabled]="invoiceForm.invalid || !invoiceForm.dirty" (click)="new ? createInvoice() : updateInvoice()">
+        {{ new ? 'Kreiraj fakturu' : 'Sačuvaj promjene'}}</ion-button>
+    </div>
+  </ng-container>
+
+
+</div>

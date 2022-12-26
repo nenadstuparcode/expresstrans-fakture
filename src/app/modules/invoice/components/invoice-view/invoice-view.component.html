@@ -1,0 +1,23 @@
+<div class="p-3">
+  <ion-card color="light">
+    <ng-container *ngIf="invoice$ | async as invoice; else noDriver">
+      <ion-card-header>
+        <ion-card-title>{{ invoice.invoicePublicId }}</ion-card-title>
+        <ion-card-subtitle>{{ invoice.createdAt | date: 'dd.MM.YYYY' }}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content *ngIf="(gds.loading$ | async) === false">
+        <app-invoice-form-shared
+          [new]="false"
+          [data]="invoice"
+          [loading]="loading$ | async"
+          (onAction)="onAction($event)"
+        ></app-invoice-form-shared>
+      </ion-card-content>
+    </ng-container>
+
+    <ng-template #noDriver>
+      <ion-card-content> Nema Vozaca </ion-card-content>
+    </ng-template>
+  </ion-card>
+</div>

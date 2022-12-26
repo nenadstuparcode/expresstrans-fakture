@@ -1,0 +1,69 @@
+const obj1 = {
+  name: 'Nenad',
+  age: 16,
+};
+
+const obj2 = {
+  name: 'Milan',
+  age: 20,
+};
+
+function putObjKeysToArray (obj) {
+  return Object.keys(obj);
+}
+
+function checkKeys(arr1, arr2) {
+  return arr1.every(key => arr2.includes(key));
+}
+
+const obj1keys = putObjKeysToArray(obj1);
+const obj2keys = putObjKeysToArray(obj2);
+console.log(checkKeys(obj1keys, obj2keys));
+let result = checkKeys(obj1keys, obj2keys);
+
+
+console.log(`Kljucevi u objektu su jednaki: ${result}`);
+
+const objToCheck = {
+  name: 'Nenad',
+  age: 16,
+  plata: 1000,
+  ocjene: {
+    matis: 2,
+    fizicko: 5,
+  }
+};
+
+function doubleIfNumber(obj) {
+  for (const key in obj) {
+
+    if(!isNaN(obj[key])) {
+      obj[key] *= 2;
+    }
+
+    if(typeof(obj[key]) === 'object' && Object.keys(obj[key])) {
+      doubleIfNumber(obj[key]);
+    }
+  }
+}
+
+doubleIfNumber(objToCheck)
+console.log(objToCheck);
+
+
+
+const ime = 'Milan';
+
+
+const daLiJeMilan = ime === 'Milan' ? 'Jeste Milan' : 'Nije Milan';
+
+condition ? if true : if false
+
+
+ime === 'Milan' ? consoel.log('Jeste Milan') : console.log('Nije Milan');
+
+
+
+console.log(dali);
+
+

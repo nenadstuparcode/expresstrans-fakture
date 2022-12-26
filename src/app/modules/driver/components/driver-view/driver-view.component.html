@@ -1,0 +1,38 @@
+<ion-card  color="light">
+  <ng-container *ngIf="driver$ | async as driver; else noDriver">
+    <ion-card-header>
+      <ion-card-title>{{driver.name}}</ion-card-title>
+      <ion-card-subtitle>kreirano: {{driver.createdAt | date: "dd.MM.YYYY"}}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <app-driver-form-shared
+        [new]="false"
+        [data]="driver"
+        (onAction)="onAction($event)"
+      ></app-driver-form-shared>
+    </ion-card-content>
+  </ng-container>
+  <ng-template #noDriver>
+    <ion-card-content>
+      Nema Vozaca
+    </ion-card-content>
+  </ng-template>
+</ion-card>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

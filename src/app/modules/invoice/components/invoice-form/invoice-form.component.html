@@ -1,0 +1,34 @@
+<ion-card  color="light">
+  <ion-card-header>
+    <div class="header-controls-flex">
+      <ion-card-title>Kreiraj fakturu</ion-card-title>
+      <ion-button size="small" color="light" (click)="expanded = !expanded">{{expanded ? 'zatvori': 'dodaj'}}</ion-button>
+    </div>
+  </ion-card-header>
+
+  <ion-card-content [hidden]="!expanded">
+    <app-invoice-form-shared
+      (onAction)="detectAction($event)"
+      [new]="true"
+      [data]="null"
+    ></app-invoice-form-shared>
+
+  </ion-card-content>
+</ion-card>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

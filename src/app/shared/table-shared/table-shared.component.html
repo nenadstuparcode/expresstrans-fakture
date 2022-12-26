@@ -1,0 +1,64 @@
+<div class="mat-elevation-z2 example-container">
+
+     <div class="example-loading-shade" *ngIf="isLoadingResults || hasErrorLoading">
+        <mat-spinner *ngIf="!hasErrorLoading; else errorTemplate"></mat-spinner>
+        <ng-template #errorTemplate>
+          <div class="error-message">
+            <p>Učitavanje nije uspjelo</p>
+            <ion-button size="small" color="secondary" [routerLink]="'/'">Učitaj ponovo</ion-button>
+          </div>
+        </ng-template>
+      </div>
+
+      <div class="example-loading-shade" *ngIf="!isLoadingResults && !hasErrorLoading && (dataSource$ | async).length === 0">
+        <div class="error-message">
+          <p>Nema rezultata</p>
+        </div>
+      </div>
+    <div
+      *ngIf="(dataSource$ | async) as dataSource"
+      class="example-table-container"
+      [class.loading]="isLoadingResults"
+      [class.error]="hasErrorLoading"
+      [class.no-results-length]="!isLoadingResults && !hasErrorLoading && dataSource.length === 0"
+    >
+      <table mat-table [dataSource]="dataSource" [trackBy]="trackByFn">
+
+        <ng-container *ngFor="let c of columnsConfig" [matColumnDef]="c.field" [sticky]="c.sticky">
+          <th
+            style="{{ 'width:' + c.width + '!important'}}"
+            mat-header-cell
+            *matHeaderCellDef
+            [ngClass]="c.customClass"
+          >{{c.caption}}</th>
+          <td
+            style="{{ 'width:' + c.width + '!important'}}"
+            (click)="c.clickFn ? c.clickFn(data, $event) : null"
+            [ngClass]="c.customClass"
+            mat-cell
+            *matCellDef="let data">
+            <app-base-cell
+              [column]="c"
+              [rowData]="data"
+              [cellValue]="c.cell(data)"
+            ></app-base-cell>
+          </td>
+          <td
+            [ngClass]="c.customClass"
+            mat-footer-cell
+            *matFooterCellDef >
+            <ng-container *ngIf="c.showFooter && dataSource[0]">
+              <span class="fw-bold">
+                  {{ c.footer(dataSource[0]) }}
+              </span>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row class="table-shared-row"  (click)="clickAction(element._id, $event)" *matRowDef="let element; columns: displayedColumns;"></tr>
+        <tr [class.d-none]="dataSource.length === 0" mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+      </table>
+    </div>
+  <ng-content></ng-content>
+</div>

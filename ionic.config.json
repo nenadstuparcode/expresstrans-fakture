@@ -1,0 +1,7 @@
+{
+  "name": "ExpressTransInvoices",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
