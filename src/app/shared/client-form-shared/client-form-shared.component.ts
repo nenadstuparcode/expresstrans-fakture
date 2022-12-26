@@ -12,6 +12,7 @@ import { ClientsService } from '@app/services/clients.service';
 import { LoadingService } from '@app/services/loading.service';
 import { throwError } from 'rxjs';
 import { MessageType } from '@app/services/loading.interface';
+import {IonicModule} from "@ionic/angular";
 
 export enum Action {
   save = 'save',
@@ -22,7 +23,7 @@ export enum Action {
 
 @Component({
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatIconModule, MatSelectModule, MatFormFieldModule],
+  imports: [IonicModule, CommonModule, ReactiveFormsModule, MatInputModule, MatIconModule, MatSelectModule, MatFormFieldModule],
   providers: [],
   selector: 'app-client-form-shared',
   templateUrl: './client-form-shared.component.html',
@@ -42,7 +43,7 @@ export class ClientFormSharedComponent {
   constructor(
     private fb: FormBuilder,
     private ls: LoadingService,
-    private countryService: CountryService,
+    public countryService: CountryService,
     private cs: ClientsService,
   ) {}
 

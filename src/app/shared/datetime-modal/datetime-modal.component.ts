@@ -27,7 +27,7 @@ export class DatetimeModalComponent {
 
   constructor(public dialogRef: MatDialogRef<DatetimeModalComponent>, @Inject(MAT_DIALOG_DATA) public data: string) {}
 
-  public setDate(date: string): void {
+  public setDate(date: any): void {
     if(this.data === 'time') {
       this.dateToSend = date;
     } else {
@@ -35,8 +35,7 @@ export class DatetimeModalComponent {
     }
   }
 
-  public confirmDate(date: string): void {
-    console.log(date);
+  public confirmDate(date: any): void {
     this.popoverDate.confirm();
     setTimeout(() => {
       this.dialogRef.close(date);

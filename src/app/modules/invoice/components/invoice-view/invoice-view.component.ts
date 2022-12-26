@@ -21,7 +21,7 @@ export class InvoiceViewComponent implements OnInit {
     private ds: InvoiceService,
     private router: Router,
     private actRoute: ActivatedRoute,
-    private gds: GeneralDataService,
+    public gds: GeneralDataService,
     ) {}
 
   public ngOnInit(): void {

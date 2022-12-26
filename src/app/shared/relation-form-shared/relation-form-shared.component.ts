@@ -10,10 +10,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MessageType } from '@app/services/loading.interface';
 import { throwError } from 'rxjs';
 import { LoadingService } from '@app/services/loading.service';
+import {IonicModule} from "@ionic/angular";
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatInputModule, CommonModule, MatFormFieldModule],
+  imports: [ReactiveFormsModule, MatInputModule, CommonModule, MatFormFieldModule, IonicModule],
   providers: [RelationsService],
   selector: 'app-relation-form-shared',
   templateUrl: './relation-form-shared.component.html',

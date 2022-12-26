@@ -11,6 +11,7 @@ import { SanitizeHtmlPipe } from '@app/common/sanitize.pipe';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { FilterComponent } from '@app/shared/filter/filter.component';
 import { TableSharedComponent } from '@app/shared/table-shared/table-shared.component';
+import {IonicModule} from "@ionic/angular";
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { TableSharedComponent } from '@app/shared/table-shared/table-shared.comp
     MatPaginatorModule,
     FilterComponent,
     TableSharedComponent,
+    IonicModule,
   ],
   providers: [SanitizeHtmlPipe, DatePipe],
 })

@@ -8,5 +8,5 @@ import {GeneralDataService} from "@app/services/general-data.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvoiceComponent {
-  constructor(private gds: GeneralDataService) {}
+  constructor(public gds: GeneralDataService) {}
 }

@@ -7,7 +7,7 @@ export interface TableColumn {
   customClass: string;
   cell?: Function;
   clickFn?: Function;
-  template?: string | SafeHtml | TemplateRef<any | null>;
+  template?: TemplateRef<any>;
   customComponent?: any;
   setTemplate?: Function;
   dynamicPipe?: string;
