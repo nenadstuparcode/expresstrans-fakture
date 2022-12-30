@@ -1,22 +1,25 @@
-<ion-card  color="light">
-  <ng-container *ngIf="relation$ | async as relation; else noRelation">
-    <ion-card-header>
-      <ion-card-title>{{relation.name}}</ion-card-title>
-      <ion-card-subtitle>kreirano: {{relation.createdAt | date: "dd.MM.YYYY"}}</ion-card-subtitle>
-    </ion-card-header>
+<ion-content class="ion-padding">
+  <ion-card  color="light">
+    <ng-container *ngIf="relation$ | async as relation; else noRelation">
+      <ion-card-header>
+        <ion-card-title>{{relation.name}}</ion-card-title>
+        <ion-card-subtitle>kreirano: {{relation.createdAt | date: "dd.MM.YYYY"}}</ion-card-subtitle>
+      </ion-card-header>
 
-    <ion-card-content>
-      <app-relation-form-shared
-        [new]="false"
-        [data]="relation"
-        (onAction)="onAction($event)"
-      ></app-relation-form-shared>
-    </ion-card-content>
-  </ng-container>
-  <ng-template #noRelation>
-    <ion-card-content>
-      Nema Relacija
-    </ion-card-content>
-  </ng-template>
-</ion-card>
+      <ion-card-content>
+        <app-relation-form-shared
+          [new]="false"
+          [data]="relation"
+          (onAction)="onAction($event)"
+        ></app-relation-form-shared>
+      </ion-card-content>
+    </ng-container>
+    <ng-template #noRelation>
+      <ion-card-content>
+        Nema Relacija
+      </ion-card-content>
+    </ng-template>
+  </ion-card>
+</ion-content>
+
 

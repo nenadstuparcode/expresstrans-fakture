@@ -1,34 +1,14 @@
-<ion-card  color="light">
+<ion-card color="light" class="mb-4">
   <ion-card-header>
     <div class="header-controls-flex">
       <ion-card-title>Kreiraj relaciju</ion-card-title>
-      <ion-button size="small" color="light" (click)="expanded = !expanded">{{expanded ? 'zatvori': 'dodaj'}}</ion-button>
+      <ion-button size="small" color="light" (click)="expanded = !expanded">{{
+        expanded ? 'zatvori' : 'dodaj'
+      }}</ion-button>
     </div>
   </ion-card-header>
 
   <ion-card-content *ngIf="expanded">
-    <app-relation-form-shared
-      [new]="true"
-      [data]="null"
-      (onAction)="detectAction($event)"
-    ></app-relation-form-shared>
-
+    <app-relation-form-shared [new]="true" [data]="null" (onAction)="detectAction($event)"></app-relation-form-shared>
   </ion-card-content>
 </ion-card>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

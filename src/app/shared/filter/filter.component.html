@@ -1,21 +1,45 @@
 
 <div class="row">
   <ng-container *ngIf="searchForm">
-    <div class="col-lg-3" [formGroup]="searchForm">
+    <div class="col-lg-2" [formGroup]="searchForm">
       <mat-form-field class="example-form-field" appearance="outline">
         <mat-label>Filter</mat-label>
         <input autocomplete="off" type="text" formControlName="searchTerm" matInput placeholder="Pretraga">
       </mat-form-field>
     </div>
-    <div class="col-lg-3">
+    <div class="col-lg-2" *ngIf="sortOptions">
       <mat-form-field class="example-form-field" appearance="outline">
-        <mat-label>Filtriraj po:</mat-label>
-        <mat-select (selectionChange)="filter($event)">
-          <mat-option *ngFor="let filter of filters" [value]="filter.value">{{ filter.name }}</mat-option>
+        <mat-label>Sortiraj po:</mat-label>
+        <mat-select (selectionChange)="sort($event)">
+          <mat-option *ngFor="let sort of sortOptions" [value]="sort.value">{{ sort.name }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
-
+    <div *ngIf="dateRange" class="col-lg-4">
+      <div class="row">
+        <div class="col-lg-6">
+          <mat-form-field class="example-form-field" appearance="outline">
+            <mat-label>Od</mat-label>
+            <input matInput [matDatepicker]="dp1" placeholder="Od" [formControl]="start">
+            <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+            <mat-datepicker #dp1></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6">
+          <mat-form-field class="example-form-field" appearance="outline">
+            <mat-label>Do</mat-label>
+            <input matInput [matDatepicker]="dp2" placeholder="Do" [formControl]="end">
+            <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+            <mat-datepicker #dp2></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-1">
+      <ion-button class="custom-button" (click)="resetDates()" color="light" size="small"> Resetuj Filtere
+        <ion-icon name="close" size="small"></ion-icon>
+      </ion-button>
+    </div>
   </ng-container>
 
 </div>

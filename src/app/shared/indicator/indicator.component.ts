@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { BaseCellComponent } from '@app/shared/base-cell/base-table-cell';
-import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import {CommonModule} from "@angular/common";
+import {IonicModule} from "@ionic/angular";
 
 @Component({
   standalone: true,

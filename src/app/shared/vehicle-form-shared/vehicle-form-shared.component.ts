@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {DriversService, IDriver, IVehicle} from '@app/services/drivers.service';
 import {Action} from '@app/shared/client-form-shared/client-form-shared.component';
 import {catchError, take, tap} from 'rxjs/operators';
@@ -13,7 +13,7 @@ import {IonicModule} from "@ionic/angular";
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatInputModule, CommonModule, FormsModule, IonicModule],
+  imports: [ReactiveFormsModule, MatInputModule, CommonModule, IonicModule],
   selector: 'app-vehicle-form-shared',
   templateUrl: './vehicle-form-shared.component.html',
   styleUrls: ['./vehicle-form-shared.component.scss'],

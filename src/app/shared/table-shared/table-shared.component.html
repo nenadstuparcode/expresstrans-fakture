@@ -26,13 +26,13 @@
 
         <ng-container *ngFor="let c of columnsConfig" [matColumnDef]="c.field" [sticky]="c.sticky">
           <th
-            style="{{ 'width:' + c.width + '!important'}}"
+            style="{{ 'width:' + c.width + '!important;' +  'text-align:' + c.align + ' !important;'}}"
             mat-header-cell
             *matHeaderCellDef
             [ngClass]="c.customClass"
           >{{c.caption}}</th>
           <td
-            style="{{ 'width:' + c.width + '!important'}}"
+            style="{{ 'width:' + c.width + '!important;' +  'text-align:' + c.align + ' !important;'}}"
             (click)="c.clickFn ? c.clickFn(data, $event) : null"
             [ngClass]="c.customClass"
             mat-cell
@@ -44,6 +44,7 @@
             ></app-base-cell>
           </td>
           <td
+            style="{{ 'width:' + c.width + '!important;' +  'text-align:' + c.align + ' !important;'}}"
             [ngClass]="c.customClass"
             mat-footer-cell
             *matFooterCellDef >

@@ -7,10 +7,7 @@
           <div class="col-lg-4 col-sm-6">
             <mat-form-field class="example-form-field" appearance="outline">
               <mat-label>Broj Fakture</mat-label>
-              <input autocomplete="off" matInput type="number" formControlName="invoiceId" />
-              <button tabindex="-1" *ngIf="true" matSuffix mat-icon-button aria-label="Clear" (click)="invoiceId.reset()">
-                <mat-icon>close</mat-icon>
-              </button>
+              <input autocomplete="off" matInput readonly type="number" formControlName="invoiceId"/>
             </mat-form-field>
           </div>
 
@@ -18,7 +15,7 @@
           <div class="col-lg-8 col-sm-6">
             <mat-form-field class="example-form-field" appearance="outline">
               <mat-label>Naziv Klijenta</mat-label>
-              <input type="text" matInput formControlName="clientId" isInArray [arrayToCheck]="clients" [matAutocomplete]="client"  />
+              <input type="text" matInput formControlName="clientId" isInArray [arrayToCheck]="clients" [isRequired]="true" [matAutocomplete]="client"  />
               <mat-error *ngIf="invoiceForm.controls['clientId'].errors?.isInArray"> Izaberi iz menija </mat-error>
               <button tabindex="-1" *ngIf="true" matSuffix mat-icon-button aria-label="Clear" (click)="resetForm(invoiceForm.controls['clientId'], $event)">
                 <mat-icon>close</mat-icon>
@@ -33,7 +30,6 @@
 
           <div class="offset-lg-12">
             <section class="example-form-field mb-custom mt-1">
-<!--              <label class="sm-margin">Tip Fakture:</label>-->
               <mat-radio-group formControlName="invoiceType">
                 <mat-radio-button class="sm-margin" value="cargo" (click)="resetFullPrice()">
                   Transport Robe
@@ -50,6 +46,7 @@
           <div class="col-lg-6">
             <app-date
               name="invoiceDateStart"
+              [value]="invoiceForm?.controls['invoiceDateStart'].value || null"
               [group]="invoiceForm"
               title="Datum Fakture"
               type="date"
@@ -62,6 +59,7 @@
           <div class="col-lg-6">
             <app-date
               name="invoiceDateReturn"
+              [value]="invoiceForm?.controls['invoiceDateReturn'].value || null"
               [group]="invoiceForm"
               [title]=" invoiceType === 'cargo' ? 'Datum Istovara' : 'Datum Povratka' "
               type="date"
@@ -193,9 +191,15 @@
             </mat-form-field>
           </div>
 
-          <div [ngClass]="invoiceType === InvoiceTypes.bus ? 'offset-lg-8 col-lg-4' : 'col-lg-6'">
+          <div [ngClass]="invoiceType === InvoiceTypes.bus ? 'offset-lg-4 col-lg-4' : 'col-lg-6'">
             <div class="centered-checkbox">
               <mat-checkbox formControlName="payed">Plaćeno</mat-checkbox>
+            </div>
+          </div>
+
+          <div [ngClass]="invoiceType === InvoiceTypes.bus ? 'col-lg-4' : 'col-lg-6'">
+            <div class="centered-checkbox">
+              <mat-checkbox formControlName="active">Aktivno</mat-checkbox>
             </div>
           </div>
 

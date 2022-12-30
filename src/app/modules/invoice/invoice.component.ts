@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import {GeneralDataService} from "@app/services/general-data.service";
+import { GeneralDataService } from '@app/services/general-data.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-invoice',
@@ -8,5 +9,9 @@ import {GeneralDataService} from "@app/services/general-data.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvoiceComponent {
-  constructor(public gds: GeneralDataService) {}
+  constructor(public gds: GeneralDataService, private location: Location) {}
+
+  public goBack(): void {
+    this.location.back();
+  }
 }

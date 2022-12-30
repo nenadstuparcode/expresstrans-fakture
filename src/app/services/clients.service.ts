@@ -32,6 +32,8 @@ export interface ISearchParams {
   sortBy?: string;
   sortOrder?: -1 | 1;
   clientId?: string;
+  start?: string;
+  end?: string;
 }
 
 @Injectable({

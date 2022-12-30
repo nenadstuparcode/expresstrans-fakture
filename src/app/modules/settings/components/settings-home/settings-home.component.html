@@ -1,3 +1,16 @@
-<p>
-  settings-home works!
-</p>
+<ion-card color="light">
+  <ion-card-header>
+    <ion-card-title>Izaberi izvještaj</ion-card-title>
+    <ion-card-subtitle></ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content style="padding: 0">
+    <ion-list style="margin: 0; padding: 0">
+      <ion-item *ngFor="let report of reports">
+        <ion-icon slot="start" name="document"></ion-icon>
+        <ion-label>{{ report.name }}</ion-label>
+        <ion-button size="small" class="ion-float-end" (click)="report.click()">Printaj</ion-button>
+      </ion-item>
+    </ion-list>
+  </ion-card-content>
+</ion-card>
+

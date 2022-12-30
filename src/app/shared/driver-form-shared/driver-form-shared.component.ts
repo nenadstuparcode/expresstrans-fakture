@@ -13,7 +13,7 @@ import {IonicModule} from "@ionic/angular";
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatInputModule, CommonModule, IonicModule, MatFormFieldModule],
+  imports: [ReactiveFormsModule, MatInputModule, CommonModule, MatFormFieldModule, IonicModule],
   selector: 'app-driver-form-shared',
   templateUrl: './driver-form-shared.component.html',
   styleUrls: ['./driver-form-shared.component.scss'],

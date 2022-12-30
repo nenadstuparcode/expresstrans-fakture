@@ -91,7 +91,7 @@ export class ClientListComponent {
       caption: 'Plaćanje',
       customClass: '',
       width: '60px',
-      align: 'right',
+      align: 'center',
       cell: (element: Record<string, any>) => element['hasInvoiceToPay'],
       customComponent: IndicatorComponent,
     },

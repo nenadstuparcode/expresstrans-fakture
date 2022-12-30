@@ -20,12 +20,11 @@ export class LoadingService {
     await this.loadingCtrl.dismiss();
   }
 
-
   public async showToast(msg: MessageType): Promise<void> {
     const toast: HTMLIonToastElement = await this.toastCtrl.create({
       message: msg,
       duration: 3500,
-      color: msg === MessageType.success ? null : 'danger',
+      color: msg === MessageType.success || msg === MessageType.printSuccess ? null : 'danger',
       icon: msg === MessageType.success ? 'checkmark' : 'alert-circle',
       buttons: [
         {

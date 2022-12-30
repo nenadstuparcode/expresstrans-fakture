@@ -33,7 +33,7 @@ export interface ICreateInvoicePayload {
   priceKmTax: number;
   invDriver: string;
   invTrailer: string;
-  useTotalPrice: boolean;
+  active: boolean;
 }
 
 export interface IUpdateInvoicePayload {
@@ -117,7 +117,7 @@ export interface ICreateInvoiceResponse {
   priceKmTax: number;
   invDriver: string;
   invTrailer: string;
-  useTotalPrice: boolean;
+  active: boolean;
 }
 
 export interface IInvoice {
@@ -165,11 +165,12 @@ export interface IInvoice {
   // optional props FE added
   clientName?: string;
   type?: string;
-  useTotalPrice: boolean;
+  active: boolean;
   bam?: string;
   eur?: string;
   tax?: string;
   clientUniqueId?: string;
+  notActive?: boolean;
 }
 
 export interface IName {

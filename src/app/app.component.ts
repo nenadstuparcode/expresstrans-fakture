@@ -19,7 +19,7 @@ export class AppComponent {
     { title: 'Prikolice', url: '/trailer', icon: 'car' },
     { title: 'Vozači', url: '/driver', icon: 'people' },
     { title: 'Relacije', url: '/relation', icon: 'swap-horizontal' },
-    { title: 'Podešavanja', url: '/settings', icon: 'settings' },
+    { title: 'Izvještaji', url: '/settings', icon: 'settings' },
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
   constructor(private gds: GeneralDataService) {}

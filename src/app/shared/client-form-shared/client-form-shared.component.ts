@@ -23,7 +23,7 @@ export enum Action {
 
 @Component({
   standalone: true,
-  imports: [IonicModule, CommonModule, ReactiveFormsModule, MatInputModule, MatIconModule, MatSelectModule, MatFormFieldModule],
+  imports: [IonicModule,CommonModule, ReactiveFormsModule, MatInputModule, MatIconModule, MatSelectModule, MatFormFieldModule],
   providers: [],
   selector: 'app-client-form-shared',
   templateUrl: './client-form-shared.component.html',

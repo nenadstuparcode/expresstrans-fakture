@@ -1,19 +1,11 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  Output
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { DatetimeModalComponent } from '@app/shared/datetime-modal/datetime-modal.component';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import {MatDatepicker, MatDatepickerModule} from '@angular/material/datepicker';
+import {AbstractControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {CommonModule, DatePipe} from '@angular/common';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -34,15 +26,16 @@ import { MatButtonModule } from '@angular/material/button';
     ReactiveFormsModule,
     MatButtonModule,
   ],
-  providers: [MatDatepickerModule],
+  providers: [MatDatepickerModule, DatePipe],
   selector: 'app-date',
   templateUrl: './date.component.html',
   styleUrls: ['./date.component.scss'],
 })
 export class DateComponent implements OnDestroy {
   public componentDestroyed$: Subject<void> = new Subject<void>();
-  @Input() public name: string | null = null;
+  @Input() public name: string = null;
   @Input() public group: FormGroup;
+  @Input() public value: any;
   @Input() public title: string | null = null;
   @Input() public type: 'time' | 'date' = 'date';
   @Output() public onChange: EventEmitter<string> = new EventEmitter<string>();

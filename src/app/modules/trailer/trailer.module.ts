@@ -21,15 +21,15 @@ import {IonicModule} from "@ionic/angular";
     TrailerHomeComponent,
     TrailerViewComponent,
   ],
-  imports: [
-    CommonModule,
-    TrailerRoutingModule,
-    TrailerFormSharedComponent,
-    MatPaginatorModule,
-    FilterComponent,
-    TableSharedComponent,
-    IonicModule,
-  ],
+    imports: [
+        CommonModule,
+        TrailerRoutingModule,
+        TrailerFormSharedComponent,
+        MatPaginatorModule,
+        FilterComponent,
+        TableSharedComponent,
+        IonicModule,
+    ],
   providers: [SanitizeHtmlPipe, DatePipe],
 })
 export class TrailerModule {}

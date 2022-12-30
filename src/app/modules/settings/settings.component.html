@@ -1,28 +1,12 @@
-
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Fakture</ion-title>
+    <ion-title>Izvještaji</ion-title>
+    <ion-button class="ion-padding-end" slot="end" size="small" color="light" (click)="goBack()">Nazad</ion-button>
   </ion-toolbar>
 </ion-header>
-<ion-content>
-  <div class="row row-eq-height border-bottom" *ngIf="(gds.loading$ | async) === false">
-    <div class="col-lg-12 border-right">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
+<ion-content class="ion-padding" *ngIf="(gds.loading$ | async) === false">
+  <router-outlet></router-outlet>
 </ion-content>
-
-
-
-
-
-
-
-
-
-
-
-

@@ -388,7 +388,7 @@ export class InvoiceFormSharedComponent implements OnDestroy {
       clientId: this.fb.control(invoice?.clientId || '', Validators.required),
       invoiceDateStart: this.fb.control<string | null>(invoice?.invoiceDateStart || null, Validators.required),
       invoiceDateReturn: this.fb.control<string | null>(invoice?.invoiceDateReturn || null, Validators.required),
-      invoiceRelations: this.fb.array(invoice?.invoiceRelations || [], Validators.required),
+      invoiceRelations: this.fb.array( invoice ? invoice.invoiceRelations.map(r => this.fb.group(r)) : []),
       cmr: this.fb.array(invoice?.cmr || []),
       deadline: this.fb.control(invoice?.deadline || 30, Validators.required),
       priceKm: this.fb.control(invoice?.priceKm || null),
@@ -402,7 +402,7 @@ export class InvoiceFormSharedComponent implements OnDestroy {
       invoiceType: this.fb.control(invoice?.invoiceType || InvoiceType.cargo, Validators.required),
       invTrailer: this.fb.control(invoice?.invTrailer || null),
       invDriver: this.fb.control(invoice?.invDriver || null),
-      useTotalPrice: this.fb.control(invoice?.useTotalPrice || false),
+      active: this.fb.control(invoice ? invoice.active : true),
     });
 
     this.relationsForm = this.fb.group({
@@ -455,17 +455,17 @@ export class InvoiceFormSharedComponent implements OnDestroy {
       this.updatingCurrenciesBam$.next(true);
       this.updatingCurrenciesEur$.next(true);
       this.relations.push(this.fb.group(this.relationsForm.value));
+      this.relations.markAsDirty();
     }
 
     this.relationsForm.reset();
     this.updatingCurrenciesBam$.next(false);
     this.updatingCurrenciesEur$.next(false);
-
-    this.logForm();
   }
 
   public removeRelation(index: number): void {
     this.relations.removeAt(index);
+    this.relations.markAsDirty();
   }
 
   public get priceBam(): FormControl {
@@ -625,7 +625,6 @@ export class InvoiceFormSharedComponent implements OnDestroy {
             .updateInvoice(this.invoiceForm.value, this.sourceData._id)
             .pipe(
               tap((response: IInvoice) => {
-                console.log(response);
                 this.ls.showToast(MessageType.success);
                 this.ls.end();
                 this.ns.shouldSave.next(Action.reload);
@@ -661,18 +660,13 @@ export class InvoiceFormSharedComponent implements OnDestroy {
     return total;
   }
 
-  public logForm(event?: any): void {
-    console.log(this.invoiceForm);
-    console.log(this.invoiceForm.value);
-    console.log(this.invoiceForm.errors);
-  }
-
   public resetFullPrice(): void {
     this.updatingCurrenciesBam$.next(true);
     this.updatingCurrenciesEur$.next(true);
     this.invoiceForm.controls['priceEuros'].reset();
     this.invoiceForm.controls['priceKm'].reset();
     this.invoiceForm.controls['priceKmTax'].reset();
+    this.invoiceForm.controls['invTrailer'].reset();
     this.updatingCurrenciesBam$.next(false);
     this.updatingCurrenciesEur$.next(false);
   }
@@ -685,6 +679,7 @@ export class InvoiceFormSharedComponent implements OnDestroy {
       this.relations.removeAt(0);
     }
 
+    this.invoiceForm.controls['invTrailer'].reset();
     this.updatingCurrenciesBam$.next(false);
     this.updatingCurrenciesEur$.next(false);
   }

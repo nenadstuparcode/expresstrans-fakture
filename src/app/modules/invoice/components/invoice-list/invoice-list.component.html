@@ -9,7 +9,8 @@
     <table-filter
       [params]="this.params"
       (onSearch)="onSearch($event)"
-      [filters]="filters"
+      [sortOptions]="filters"
+      [dateRange]="true"
     ></table-filter>
     <table-shared
       [dataSource$]="data$"

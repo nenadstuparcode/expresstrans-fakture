@@ -43,7 +43,7 @@ export class TrailerViewComponent implements OnInit {
 
   public onAction(action: Action): void {
     switch (action) {
-      case Action.cancel: this.router.navigate(['vehicle']);
+      case Action.cancel: this.router.navigate(['trailer']);
     }
   }
 

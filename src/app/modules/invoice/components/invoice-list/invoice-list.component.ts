@@ -5,7 +5,7 @@ import { TableColumn } from '@app/shared/table-shared/table-shared.interface';
 import { SanitizeHtmlPipe } from '@app/common/sanitize.pipe';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { NotifyService } from '@app/services/notify.service';
-import { ActionSheetController, AlertController, LoadingController } from '@ionic/angular';
+import { ActionSheetController, AlertController, LoadingController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { catchError, filter, finalize, take, takeUntil, tap } from 'rxjs/operators';
 import { Action } from '@app/shared/client-form-shared/client-form-shared.component';
@@ -18,9 +18,12 @@ import { IPrintOption, PrintService } from '@app/common/print.service';
 import { InvoiceTypeComponent } from '@app/shared/invoice-type/invoice-type.component';
 import { CheckboxComponent } from '@app/shared/checkbox/checkbox.component';
 import { RelationsComponent } from '@app/shared/relations/relations.component';
-import {MatDialog} from "@angular/material/dialog";
-import {PreviewComponent} from "@app/modules/invoice/components/preview/preview.component";
-import {LoadingService} from "@app/services/loading.service";
+import { MatDialog } from '@angular/material/dialog';
+import { PreviewComponent } from '@app/modules/invoice/components/preview/preview.component';
+import { LoadingService } from '@app/services/loading.service';
+import { File } from '@ionic-native/file';
+import { MessageType } from '@app/services/loading.interface';
+import {IndicatorComponent} from "@app/shared/indicator/indicator.component";
 
 export interface IFilter {
   name: string;
@@ -48,11 +51,11 @@ export class InvoiceListComponent {
   public sortOptions: IFilter[] = [
     {
       name: 'Samo Plaćene',
-      value: { payed: true }
+      value: { payed: true },
     },
     {
       name: 'Samo Neplaćene',
-      value: { payed: false }
+      value: { payed: false },
     },
   ];
 
@@ -79,26 +82,27 @@ export class InvoiceListComponent {
   public params: ISearchParams = {
     searchTerm: '',
     searchSkip: 0,
-    searchLimit: 10,
+    searchLimit: 25,
     sort: { createdAt: -1 },
     clientId: null,
   };
 
+  public pdf: string = '';
   public columnsConfig: TableColumn[] = [
     {
       field: 'position',
       caption: 'Br',
       customClass: '',
       align: 'left',
-      width: '50px',
+      width: '1%',
       cell: (element: Record<string, any>) => element['position'],
     },
     {
       field: 'invoicePublicId',
       caption: 'Br.Fk.',
-      customClass: '',
+      customClass: 'fw-bold',
       align: 'left',
-      width: '50px',
+      width: '2%',
       cell: (element: Record<string, any>) => element['invoicePublicId'],
       sticky: true,
     },
@@ -110,6 +114,15 @@ export class InvoiceListComponent {
       width: '40px',
       cell: (element: Record<string, any>) => element['invoiceType'],
       customComponent: InvoiceTypeComponent,
+    },
+    {
+      field: 'notActive',
+      caption: 'Aktivno',
+      customClass: '',
+      align: 'left',
+      width: '40px',
+      cell: (element: Record<string, any>) => element['notActive'],
+      customComponent: IndicatorComponent,
     },
     {
       field: 'clientId',
@@ -149,7 +162,7 @@ export class InvoiceListComponent {
       caption: 'Vozač',
       customClass: '',
       width: '150px',
-      align: 'left',
+      align: 'center',
       cell: (element: Record<string, any>) => element['invDriver'],
     },
     {
@@ -159,7 +172,7 @@ export class InvoiceListComponent {
       width: '50px',
       showFooter: true,
       footer: (element: Record<string, any>) => 'UKUPNO:',
-      align: 'right',
+      align: 'center',
       cell: (element: Record<string, any>) => element['payed'],
       clickFn: (data: any, event: any) => this.updatePayment(data, event),
       customComponent: CheckboxComponent,
@@ -240,14 +253,13 @@ export class InvoiceListComponent {
       .subscribe();
   }
 
-  openDialog(pdf: string, invoice: IInvoice) {
+  openDialog(pdf: string, invoice: IInvoice, response: ArrayBuffer) {
     this.matDialog.open(PreviewComponent, {
-      data: { pdf: pdf, invoice: invoice },
+      data: { pdf: pdf, invoice: invoice, response: response },
     });
   }
 
   public searchInvoices(params: ISearchParams): void {
-    console.log(params);
     this.isLoadingResults$.next(true);
     this.hasErrorLoading$.next(false);
     this.ds
@@ -258,7 +270,6 @@ export class InvoiceListComponent {
           this.totalDataCount = response.meta.count;
           this.totalKm = response.meta.priceTotalKm;
           this.totalEur = response.meta.priceTotalEur;
-          console.log(this.totalEur);
           this.invoices = [...response.data];
           this.data$.next(
             response.data.map((invoice: IInvoice, index: number) => ({
@@ -276,6 +287,7 @@ export class InvoiceListComponent {
               tax: this.currencyPipe.transform(invoice.priceKmTax, 'KM'),
               totalKm: this.currencyPipe.transform(response.meta.priceTotalKm, 'KM'),
               totalEur: this.currencyPipe.transform(response.meta.priceTotalEur, 'EUR'),
+              notActive: !invoice.active,
             })),
           );
         }),
@@ -308,7 +320,6 @@ export class InvoiceListComponent {
   }
 
   public async deleteModal(invoice: IInvoice, event?: any): Promise<void> {
-    console.log(invoice);
     event.preventDefault();
     event.stopImmediatePropagation();
 
@@ -340,40 +351,110 @@ export class InvoiceListComponent {
   }
 
   public printInvoice(data: IInvoice, option: number, signed: boolean): void {
-    this.ls.start('Printanje Fakture').then(() => {
-      this.ds
-        .printInvoice({
-          printOption: option.toString(),
-          clientId: data.clientUniqueId,
-          invoiceId: data._id,
-          signed: signed,
+    this.ls
+      .start('Printanje Fakture')
+      .then(() => {
+        this.ds
+          .printInvoice({
+            printOption: option.toString(),
+            clientId: data.clientUniqueId,
+            invoiceId: data._id,
+            signed: signed,
+          })
+          .pipe(
+            filter((data: ArrayBuffer) => !!data),
+            tap((response: ArrayBuffer) => {
+              this.ls.showToast(MessageType.success);
 
-        })
-        .pipe(
-          filter((data: ArrayBuffer) => !!data),
-          tap((response: ArrayBuffer) => {
-            const file: Blob = new Blob([response], {
-              type: 'application/pdf',
-            });
+              const file: Blob = new Blob([response], {
+                type: 'application/pdf',
+              });
 
-            this.openDialog(URL.createObjectURL(file), data);
-            this.ls.end();
-          }),
-          catchError((err: Error) => {
-            this.ls.end();
-            return throwError(err);
-          }),
-          take(1),
-        )
-        .subscribe();
-    }).catch((err: Error) => {
-      this.ls.end();
-      return throwError(err);
-    })
+              const url: string = URL.createObjectURL(file);
+
+              try {
+                File.writeFile(
+                  File.externalRootDirectory,
+                  `express_trans1.pdf`,
+                  new Blob([response], { type: 'application/pdf' }),
+                  {
+                    replace: false,
+                    append: true,
+                  },
+                )
+                  .then((data: any) => {
+                    this.ls.showToast(MessageType.success);
+                  })
+                  .catch((error: Error) => throwError(error));
+
+                File.writeFile(
+                  `${File.documentsDirectory}/expresstrans`,
+                  `express_trans2.pdf`,
+                  new Blob([response], { type: 'application/pdf' }),
+                  {
+                    replace: false,
+                    append: true,
+                  },
+                ).catch((error: Error) => throwError(error));
+
+                File.writeFile(
+                  File.externalDataDirectory,
+                  `express_trans3.pdf`,
+                  new Blob([response], { type: 'application/pdf' }),
+                  {
+                    replace: true,
+                  },
+                ).catch((error: Error) => throwError(error));
+
+                File.writeFile(
+                  File.externalDataDirectory,
+                  `express_trans4.pdf`,
+                  new Blob([response], { type: 'application/pdf' }),
+                  {
+                    replace: true,
+                  },
+                ).catch((error: Error) => throwError(error));
+
+                File.writeFile(
+                  File.dataDirectory,
+                  `express_trans5.pdf`,
+                  new Blob([response], { type: 'application/pdf' }),
+                  {
+                    replace: false,
+                    append: true,
+                  },
+                ).catch((error: Error) => throwError(error));
+
+                File.writeFile(
+                  File.externalApplicationStorageDirectory,
+                  `express_trans6.pdf`,
+                  new Blob([response], { type: 'application/pdf' }),
+                  {
+                    replace: true,
+                  },
+                ).catch((error: Error) => throwError(error));
+              } catch (err) {
+                throwError(err);
+              }
+
+              this.openDialog(URL.createObjectURL(file), data, response);
+              this.ls.end();
+            }),
+            catchError((err: Error) => {
+              this.ls.end();
+              return throwError(err);
+            }),
+            take(1),
+          )
+          .subscribe();
+      })
+      .catch((err: Error) => {
+        this.ls.end();
+        return throwError(err);
+      });
   }
 
   async presentActionSheet(data: IInvoice, signed: boolean) {
-
     const actionSheet = await this.actionSheetCtrl.create({
       header: 'Opcija štampanja',
       subHeader: 'Izaberi opciju za štampanje',

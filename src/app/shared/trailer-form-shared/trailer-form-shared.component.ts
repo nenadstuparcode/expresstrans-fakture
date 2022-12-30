@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Input, Output} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DriversService, ITrailer } from '@app/services/drivers.service';
 import { Action } from '@app/shared/client-form-shared/client-form-shared.component';
@@ -9,11 +9,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MessageType } from '@app/services/loading.interface';
 import { throwError } from 'rxjs';
 import { LoadingService } from '@app/services/loading.service';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatInputModule, CommonModule, MatFormFieldModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  imports: [ReactiveFormsModule, MatInputModule, CommonModule, MatFormFieldModule, IonicModule],
   selector: 'app-trailer-form-shared',
   templateUrl: './trailer-form-shared.component.html',
   styleUrls: ['./trailer-form-shared.component.scss'],

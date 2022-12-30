@@ -73,6 +73,7 @@ export class GeneralDataService {
           .subscribe();
       })
       .catch((err: Error) => {
+        console.log(err);
         this.loadingCtrl.dismiss();
 
         return throwError(err);

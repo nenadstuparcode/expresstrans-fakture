@@ -1,1 +1,3 @@
-<ion-badge class="custom-badge" [color]="cellValue ? 'danger': 'success'">$</ion-badge>
+<ion-badge class="custom-badge" [color]="cellValue ? 'danger': 'success'">
+  <ion-icon size="large" [color]="cellValue ? 'light' : 'primary'" [name]="cellValue ? 'close-circle-outline' : 'checkmark-circle-outline'"></ion-icon>
+</ion-badge>

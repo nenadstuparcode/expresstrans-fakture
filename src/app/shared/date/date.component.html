@@ -1,7 +1,7 @@
 <div [formGroup]="group">
   <mat-form-field class="example-form-field" appearance="outline">
     <mat-label *ngIf="title">{{ title }}</mat-label>
-    <input (click)="openDateModal(type)" matInput matDatepicker readonly [formControlName]="name">
+    <input (click)="openDateModal(type)" matInput readonly [value]="value | date: 'dd.MM.YYYY'">
     <button tabindex="-1" matSuffix mat-icon-button (click)="openDateModal(type)">
       <mat-icon>calendar_month</mat-icon>
     </button>

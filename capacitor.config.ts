@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'ExpressTransInvoices',
+  appId: 'expresstrans.org',
+  appName: 'ExpressTrans',
   webDir: 'www',
   bundledWebRuntime: false
 };

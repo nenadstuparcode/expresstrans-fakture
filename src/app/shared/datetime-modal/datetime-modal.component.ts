@@ -36,6 +36,7 @@ export class DatetimeModalComponent {
   }
 
   public confirmDate(date: any): void {
+    console.log(date);
     this.popoverDate.confirm();
     setTimeout(() => {
       this.dialogRef.close(date);
