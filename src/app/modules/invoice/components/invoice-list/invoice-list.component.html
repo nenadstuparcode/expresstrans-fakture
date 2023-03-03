@@ -23,7 +23,7 @@
       <mat-paginator [length]="totalDataCount"
                      [pageSize]="this.params.searchLimit"
                      [showFirstLastButtons]="true"
-                     [pageSizeOptions]="[5,10,15,25,100]"
+                     [pageSizeOptions]="[5,10,15,25,100,250,1000]"
                      [hidePageSize]="false"
                      [pageIndex]="pageIndex"
                      (page)="handlePageEvent($event)">
