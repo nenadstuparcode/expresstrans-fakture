@@ -44,7 +44,7 @@ export class TrailerListComponent {
     },
     {
       field: 'name',
-      caption: 'Ime vozača',
+      caption: 'Tablice',
       customClass: '',
       align: 'left',
       width: '200px',

@@ -21,6 +21,7 @@ export class PreviewComponent {
     public ls: LoadingService,
   ) {}
 
+
   public download(): void {
     if(!this.platform.is('android')) {
       window.open(this.data.pdf);
@@ -31,6 +32,7 @@ export class PreviewComponent {
           : `izvjestaj_${this.generateDate()}.pdf`,
       );
     } else if (this.platform.is('android')) {
+
       File.writeExistingFile(
         File.externalRootDirectory,
         this.data.invoice
@@ -41,8 +43,8 @@ export class PreviewComponent {
         .then(() => {
           this.ls.showToast(MessageType.printSuccess);
         })
-        .catch((error: Error) => {
-          this.ls.showToast(error.message as MessageType)
+        .catch(() => {
+
           File.writeExistingFile(
             File.documentsDirectory,
             this.data.invoice
@@ -53,11 +55,40 @@ export class PreviewComponent {
             .then(() => {
               this.ls.showToast(MessageType.printSuccess);
             })
-            .catch((error: Error) => {
-              this.ls.showToast(error.message as MessageType)
-              throwError(error)
+            .catch(() => {
+
+              File.writeFile(
+                File.externalRootDirectory,
+                this.data.invoice
+                  ? `faktura_${this.data.invoice.invoicePublicId}_${this.generateDate()}.pdf`
+                  : `izvjestaj_${this.generateDate()}.pdf`,
+                new Blob([this.data.response], { type: 'application/pdf' }),
+                {
+                  append: true,
+                  replace: false,
+                }
+              )
+                .then(() => {
+                  this.ls.showToast(MessageType.printSuccess);
+                })
+                .catch(() => {
+                  File.writeExistingFile(
+                    `${File.externalRootDirectory}/expresstrans`,
+                    this.data.invoice
+                      ? `faktura_${this.data.invoice.invoicePublicId}_${this.generateDate()}.pdf`
+                      : `izvjestaj_${this.generateDate()}.pdf`,
+                    new Blob([this.data.response], { type: 'application/pdf' }),
+                  )
+                    .then(() => {
+                      this.ls.showToast(MessageType.printSuccess);
+                    })
+                    .catch((err: Error) => {
+
+                      return throwError(err);
+                    });
+                });
+
             });
-          throwError(error)
         });
     }
 

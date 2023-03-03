@@ -44,7 +44,7 @@ export class VehicleListComponent {
     },
     {
       field: 'plateNumber',
-      caption: 'Nazi vozila',
+      caption: 'Tablice',
       customClass: '',
       align: 'left',
       width: '200px',

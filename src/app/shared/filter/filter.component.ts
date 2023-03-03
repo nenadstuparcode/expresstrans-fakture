@@ -83,7 +83,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     this.searchForm.controls['searchTerm'].valueChanges
       .pipe(
-        filter((text: string) => !!text && this.resetingValues.getValue() === false),
+        filter(() => this.resetingValues.getValue() === false),
         tap((text: string) => {
           this.params = {
             ...this.params,
