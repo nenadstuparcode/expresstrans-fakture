@@ -64,8 +64,7 @@ export class AppComponent {
       .subscribe();
   }
 
-  public connectToDb(data: CustomEvent): void {
-    console.log(data.detail.value);
+  public connectToDb(data: any): void {
     this.dbService
       .setDbConnection(data.detail.value)
       .pipe(
