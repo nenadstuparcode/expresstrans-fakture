@@ -14,18 +14,20 @@ import { MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
 import { MomentUtcDateAdapter } from '@app/common/moment-utc-date-adapter';
 import localeBs from '@angular/common/locales/bs';
 import { registerLocaleData } from '@angular/common';
+import {MatSelectModule} from "@angular/material/select";
 registerLocaleData(localeBs);
 @NgModule({
   declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot(),
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    FormsModule,
-  ],
+    imports: [
+        BrowserModule,
+        IonicModule.forRoot(),
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatSelectModule,
+    ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },

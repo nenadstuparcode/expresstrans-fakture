@@ -8,12 +8,29 @@
       </ion-header>
       <ion-content>
         <ion-list id="inbox-list">
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
+          <ion-menu-toggle auto-hide="false" >
+            <ion-item *ngFor="let p of appPages; let i = index" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>
           </ion-menu-toggle>
+
+          <ion-item>
+            <ion-select *ngIf="currentConnection" (ionChange)="connectToDb($event)" [selectedText]="currentConnection.name" label="Baza podataka">
+              <ion-select-option *ngFor="let db of dbs$ | async" [value]="db.name">
+                <p>{{db.name}}</p>
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item *ngIf="currentConnection">
+            <p>Baza: {{ currentConnection.name }}</p>
+          </ion-item>
+
+          <ion-item *ngIf="currentConnection">
+            <p>Povezano u: {{ currentConnection.connectionTime }}</p>
+          </ion-item>
+
         </ion-list>
       </ion-content>
     </ion-menu>
