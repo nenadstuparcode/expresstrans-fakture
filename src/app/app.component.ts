@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { GeneralDataService } from '@app/services/general-data.service';
 import { DbService, IConnection, IDatabase } from '@app/services/db.service';
 import { BehaviorSubject, combineLatest, throwError } from 'rxjs';
-import {catchError, delay, filter, finalize, map, take, tap} from 'rxjs/operators';
+import { catchError, delay, finalize, map, take, tap } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -37,9 +37,12 @@ export class AppComponent {
   }
 
   public loadDbs(): void {
-    combineLatest([this.dbService.dbList().pipe(
-      map((dbs: IDatabase[]) => (dbs.filter((db: IDatabase) => db.name.startsWith("etrans"))))
-    ), this.dbService.getCurrentDbConnection()])
+    combineLatest([
+      this.dbService
+        .dbList()
+        .pipe(map((dbs: IDatabase[]) => dbs.filter((db: IDatabase) => db.name.startsWith('etrans')))),
+      this.dbService.getCurrentDbConnection(),
+    ])
       .pipe(
         tap(([dbs, connection]: [IDatabase[], IConnection]) => {
           this.currentConnection = {
