@@ -184,7 +184,7 @@ export class ClientListComponent {
   }
 
   public async deleteModal(client: any, event?: any): Promise<void> {
-    console.log(client);
+
     event.preventDefault();
     event.stopImmediatePropagation();
 
