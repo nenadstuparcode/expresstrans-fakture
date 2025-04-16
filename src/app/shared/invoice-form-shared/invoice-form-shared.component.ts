@@ -562,6 +562,7 @@ export class InvoiceFormSharedComponent implements OnDestroy {
   public resetAll(): void {
     this.invoiceForm.reset();
     this.relationsForm.reset();
+    window.location.reload();
   }
 
   public createInvoice(): void {
@@ -585,8 +586,8 @@ export class InvoiceFormSharedComponent implements OnDestroy {
           .pipe(
             tap(() => {
               this.ls.end();
-              this.resetAll();
               this.ls.showToast(MessageType.success);
+              this.resetAll();
               this.ns.shouldSave.next(Action.reload);
             }),
             catchError((err: Error) => {

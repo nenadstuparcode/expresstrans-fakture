@@ -22,24 +22,24 @@
             </ion-item>
           </ion-menu-toggle>
 
-          <ion-item>
-            <ion-select
-              *ngIf="currentConnection"
-              (ionChange)="connectToDb($event)"
-              [(ngModel)]="currentConnection.name"
-              label="Baza podataka"
-            >
-              <ion-select-option *ngFor="let db of dbs$ | async" [value]="db.name">
-                <p>{{ db.name }}</p>
-              </ion-select-option>
-            </ion-select>
+          <ion-item *ngIf="(dbs$ | async) as dbs">
+            <ng-container *ngIf="selectedDb">
+              <ion-select
+                (ionChange)="connectToDb($event)"
+                [(ngModel)]="selectedDb.name"
+                label="Baza podataka"
+              >
+                <ion-select-option *ngFor="let db of dbs" [value]="db.name">
+                  <p>{{ db.name }}</p>
+                </ion-select-option>
+              </ion-select>
+            </ng-container>
+
           </ion-item>
 
-          <ion-item *ngIf="currentConnection">
+          <ion-item *ngIf="selectedDb">
             <div>
-              <small>Baza: {{ currentConnection.name }}</small>
-              <br />
-              <small>Povezano {{ currentConnection.connectionTime }}</small>
+              <small>Aktivna Baza: {{ selectedDb.name }}</small>
             </div>
           </ion-item>
         </ion-list>

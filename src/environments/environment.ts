@@ -2,9 +2,11 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+// eslint-disable-next-line @typescript-eslint/typedef
 export const environment = {
   production: false,
-  apiUrl: 'https://app.dv-fm.de/api',
+  apiUrl: 'http://localhost:3000/api',
+  defaultDb: 'etrans2025',
 };
 
 /*

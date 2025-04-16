@@ -5,10 +5,10 @@ import {IClient} from '@app/services/clients.interface';
 import {catchError, filter, finalize, pluck, take, tap} from 'rxjs/operators';
 import {LoadingController} from '@ionic/angular';
 import {DriversService, IDriver, ITrailer, IVehicle} from '@app/services/drivers.service';
-import {RelationsService} from "@app/services/relations.service";
-import {Relation} from "@app/modules/invoice/invoice.interface";
-import {LoadingService} from "@app/services/loading.service";
-import {MessageType} from "@app/services/loading.interface";
+import {RelationsService} from '@app/services/relations.service';
+import {Relation} from '@app/modules/invoice/invoice.interface';
+import {LoadingService} from '@app/services/loading.service';
+import {MessageType} from '@app/services/loading.interface';
 
 @Injectable({
   providedIn: 'root',

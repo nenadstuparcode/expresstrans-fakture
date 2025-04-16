@@ -12,11 +12,12 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "es2020",
+    "esModuleInterop": true,
     "lib": ["es2018", "dom"],
     "paths": {
       "@app/*": ["src/app/*"],
       "@env/*": ["src/environments/*"],
-      "@assets/*": ["src/assets/*"],
+      "@assets/*": ["src/assets/*"]
     }
   },
   "angularCompilerOptions": {

@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { GeneralDataService } from '@app/services/general-data.service';
-import { DbService, IConnection, IDatabase } from '@app/services/db.service';
-import { BehaviorSubject, combineLatest, throwError } from 'rxjs';
-import { catchError, delay, finalize, map, take, tap } from 'rxjs/operators';
+import { DbService, IDatabase } from '@app/services/db.service';
+import { Observable } from 'rxjs';
+import { mergeMap, take, tap } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -12,7 +12,7 @@ import { DatePipe } from '@angular/common';
   providers: [DatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   public appPages = [
     {
       title: 'Fakture',
@@ -26,60 +26,25 @@ export class AppComponent {
     { title: 'Relacije', url: '/relation', icon: 'swap-horizontal' },
     { title: 'Izvještaji', url: '/settings', icon: 'settings' },
   ];
+
   private dbService: DbService = inject(DbService);
   private gds: GeneralDataService = inject(GeneralDataService);
-  private datePipe: DatePipe = inject(DatePipe);
-  dbs$: BehaviorSubject<IDatabase[]> = new BehaviorSubject<IDatabase[]>([]);
-  currentConnection: IConnection = null;
+  dbs$: Observable<IDatabase[]> = this.dbService._databases;
+  selectedDb: IDatabase = null;
+
   public ngOnInit(): void {
     this.gds.preloadGeneralData();
     this.loadDbs();
   }
 
   public loadDbs(): void {
-    combineLatest([
-      this.dbService
-        .dbList()
-        .pipe(map((dbs: IDatabase[]) => dbs.filter((db: IDatabase) => db.name.startsWith('etrans')))),
-      this.dbService.getCurrentDbConnection(),
-    ])
-      .pipe(
-        tap(([dbs, connection]: [IDatabase[], IConnection]) => {
-          this.currentConnection = {
-            ...connection,
-            connectionTime: this.datePipe.transform(connection.connectionTime, 'dd/MM/YY u HH:mm'),
-          };
-          this.dbs$.next(
-            dbs.map((db: IDatabase) => {
-              return {
-                ...db,
-                selected: db.name === connection.name,
-              };
-            }),
-          );
-        }),
-        catchError((err: Error) => {
-          this.dbs$.next([]);
-          return throwError(() => err);
-        }),
-        take(1),
-      )
-      .subscribe();
+    this.dbService.dbList().pipe(
+      mergeMap(() => this.dbService.getCurrentDbConnection()),
+      tap((db: IDatabase) => this.selectedDb = db),
+      take(1)).subscribe();
   }
 
-  public connectToDb(data: any): void {
-    this.dbService
-      .setDbConnection(data.detail.value)
-      .pipe(
-        tap((connection: IConnection) => {
-          this.currentConnection = connection;
-        }),
-        delay(2000),
-        finalize(() => {
-          document.location.reload();
-        }),
-        take(1),
-      )
-      .subscribe();
+  public connectToDb(change: any): void {
+    this.dbService.setDbConnection(change.detail.value, true);
   }
 }

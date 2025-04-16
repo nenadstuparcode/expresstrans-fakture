@@ -16,6 +16,7 @@
   <div mat-dialog-actions>
     <button mat-button mat-dialog-close>Zatvori</button>
     <button mat-button color="primary" (click)="download()">Preuzmi</button>
+    <button *ngIf="isTauri" mat-button color="primary" (click)="sendToPrinter()">Štampaj</button>
   </div>
 </div>
 
